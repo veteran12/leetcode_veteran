@@ -1,5 +1,5 @@
 /*
- *use dp, a much header version see theory of algorithm 15.5
+ *use dp, a much harder version see theory of algorithm 15.5
  *the optimal solution equation see the code
  */
 class Solution {
