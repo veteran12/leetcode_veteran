@@ -1,4 +1,4 @@
-//greedy!!!
+//tricky, can slightly save time
 
 class Solution {
 public:
