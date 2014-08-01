@@ -6,42 +6,44 @@
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
+class Solution {
+public:
     void reorderList(ListNode *head) {
         if ( head == NULL )
             return;
-        ListNode *first,*second;
+            
         ListNode dummy(0);
-        dummy.next=head;
-        first=second=&dummy;
-        while(second!=NULL && second->next!=NULL){
-            first=first->next;
-            second=second->next->next;
+        dummy.next = head;
+        
+        ListNode *p = &dummy;
+        ListNode *q = &dummy;
+        
+        while(q!=NULL && q->next!=NULL) {
+            p = p->next;
+            q = q->next->next;
         }
-        second=first->next;
-        first->next=NULL;   //need to split the list, so here set to NULL
-        first=reverse(second);
-        ListNode *p=head;
-        ListNode *q=first;
-        while(first!=NULL){
-            q=first->next;
-            first->next=p->next;
-            p->next=first;
-            p=p->next->next;
-            first=q;
+        
+        ListNode dummy1(0);
+        q = p->next;
+        p->next = NULL;
+        
+        while(q != NULL) {
+            ListNode *tmp = dummy1.next;
+            dummy1.next = q;
+            q = q->next;
+            dummy1.next->next = tmp;
         }
+        
+        p = dummy.next;
+        q = dummy1.next;
+        
+        while(q!=NULL) {
+            ListNode *tmp = p->next;
+            p->next = q;
+            q = q->next;
+            p->next->next = tmp;
+            p = tmp;
+        }
+        return;
     }
-    
-    ListNode * reverse(ListNode *head){
-        if(head==NULL)
-            return head;
-        ListNode dummy(0);
-        ListNode *p=head;
-        ListNode *q=head;
-        while(p!=NULL){
-            q=p->next;
-            p->next=dummy.next;
-            dummy.next=p;
-            p=q;
-        }
-        return dummy.next;
-    }
+};
