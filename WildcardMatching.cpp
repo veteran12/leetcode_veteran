@@ -22,3 +22,25 @@ public:
         return *p == '\0';
     }
 };
+
+bool isMatch_wildcard(const char *s, const char *p) {
+    int N = strlen(s), M = strlen(p);
+    vector<vector<bool> > dp(N + 1, vector<bool>(M + 1, false));
+    dp[0][0] = true;
+    for(int i = 1; i < M + 1; i++)
+        if(p[i - 1] == '*')
+            dp[0][i] = dp[0][i - 1];
+    
+    for(int i = 1; i < N + 1; i++) {
+        for(int j = 1; j < M + 1; j++) {
+            if(s[i - 1] == p [j - 1] || p[j - 1] == '?')
+                dp[i][j] = dp[i - 1][j - 1];
+            else if(p[j - 1] == '*') {
+                dp[i][j] = dp[i][j - 1] | dp[i - 1][j];
+            }
+            else
+                dp[i][j] = false;
+        }
+    }
+    return dp[N][M];
+}
