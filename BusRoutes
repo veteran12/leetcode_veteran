@@ -1,0 +1,42 @@
+class Solution(object):
+    def __init__(self):
+        self.res = None
+
+    def numBusesToDestination(self, routes, source, target):
+        """
+        :type routes: List[List[int]]
+        :type source: int
+        :type target: int
+        :rtype: int
+        """
+        if source == target:
+            return 0
+        graph = collections.defaultdict(set)
+        for i in range(len(routes)):
+            for stop in routes[i]:
+                graph[stop].add(i)
+        
+        count = 1
+        visited = set()
+        q = list(graph[source])+['$']
+        visiting = set(q)
+        while q:
+            cur_route = q.pop(0)
+            if cur_route == '$':
+                count+=1
+                if q:
+                    q.append('$')
+            else:
+                visited.add(cur_route)
+                visiting.remove(cur_route)
+                for stop in routes[cur_route]:
+                    if stop == target:
+                        return count
+                    for route in graph[stop]:
+                        if route not in visited and route not in visiting:
+                            q.append(route)
+                            visiting.add(route)
+        return -1
+                
+                
+            
