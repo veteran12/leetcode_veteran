@@ -1,0 +1,38 @@
+class Solution(object):
+    def sumOfDistancesInTree(self, N, edges):
+        """
+        :type N: int
+        :type edges: List[List[int]]
+        :rtype: List[int]
+        """
+        graph = collections.defaultdict(set)
+        for edge in edges:
+            graph[edge[0]].add(edge[1])
+            graph[edge[1]].add(edge[0])
+        dp = [None]*N
+        self.distanceSumPerNodeAsRoot(graph,0,set(),dp)
+        ans = [None]*N
+        self.cal(graph,0,0,set(),dp,ans,N)
+        return ans
+        
+    def distanceSumPerNodeAsRoot(self, graph, root, visited, dp):
+        node_count, dist_count = 1, 0
+        visited.add(root)
+        for node in graph[root]:
+            if node not in visited:
+                self.distanceSumPerNodeAsRoot(graph,node,visited,dp)
+                node_count+=dp[node][0]
+                dist_count = dist_count+dp[node][0]+dp[node][1]
+        dp[root] = [node_count,dist_count]
+        return
+    
+    def cal(self, graph, root, parent, visited, dp, ans, N):
+        visited.add(root)
+        if root == parent:
+            ans[root] = dp[root][1]
+        else:
+            ans[root] = dp[root][1]+(ans[parent]-dp[root][1]-dp[root][0])+(N-dp[root][0])
+        for node in graph[root]:
+            if node not in visited:
+                self.cal(graph,node,root,visited,dp,ans,N)
+        return
